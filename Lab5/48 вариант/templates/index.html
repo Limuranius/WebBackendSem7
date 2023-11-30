@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<form action="{{ url_for('index') }}" method="get">
+    <p>
+        Форма комплексного числа:
+        <select name="form">
+            {% for form in ComplexFormat %}
+                <option value={{form.value}} {{"selected" if form==selected_format else ""}}>{{form.value}}</option>
+            {% endfor %}
+        </select>
+        <p><input type=submit value=Показать name="button"></p>
+    </p>
+    {% for input_name, input_text in complex_input_fields[selected_format] %}
+        <p>{{input_text}}: <input type=number name={{input_name}} value={{z_form_data[loop.index0]}}></p>
+    {% endfor %}
+    <p>
+        Операции:<br>
+        {% for op_name in operations.keys() %}
+            <label>{{op_name}}
+                <input type=checkbox name=operations value="{{op_name}}" {{ "checked" if op_name in selected_operations else "" }}>
+                <br>
+            </label>
+        {% endfor %}
+    </p>
+    <p><input type=submit value=Отправить name="button"></p>
+</form>
+<form action="{{ url_for('index') }}" method="get">
+    <p><input type=submit value=Очистить name="button"></p>
+</form>
+
+{% if form_sent %}
+    <p>
+        {{selected_format.value}}:<br>
+        {{z.to_format(selected_format)}}
+    </p>
+    <p>
+        {% for op_name in selected_operations %}
+            {{operations[op_name](z)}}<br>
+        {% endfor %}
+    </p>
+{% endif %}
+</body>
+</html>

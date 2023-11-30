@@ -1,0 +1,65 @@
+{% macro render_table(table_name, df_table) %}
+<div class="pretty-table">
+    <p>
+        <b>{{table_name}}</b>
+    </p>
+    <table>
+        <thead>
+        <tr>
+            {% for name in df_table.dtypes.index %}
+            <th>{{name}}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for i in range(len(df_table)) %}
+        <tr>
+            {% for name in df_table.dtypes.index %}
+            <td>
+                {% if df_table.loc[i, name] is none %}
+                    <input type="button" value="Сдать">
+                {% else %}
+                    {{ df_table.loc[i, name] }}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% endmacro %}
+
+{% macro create_select(values, texts, selected_value) %}
+<select name="reader">
+    {% for value, text in zip(values, texts) %}
+        <option {% if value == selected_value %} selected {% endif %} value={{ value }}>
+            {{ text }}
+        </option>
+    {% endfor %}
+</select>
+{% endmacro %}
+
+
+
+<html>
+<head>
+    <title> Карточка читателя </title>
+</head>
+<body>
+<p>
+<form>
+    Читатель:
+    {{ create_select(combo_box["reader_id"], combo_box["reader_name"], reader_id) }}
+
+    <input type="submit" value="Найти">
+</form>
+</p>
+<!-- вызвать макрос render_table с параметрами
+"Карточка" и DataFrame book_reader
+-->
+{{ render_table(reader_id, book_reader) }}
+</body>
+</html>

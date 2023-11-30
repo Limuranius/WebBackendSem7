@@ -1,0 +1,41 @@
+{% macro create_table(data, input_n) %}
+
+{% if input_n <= data|length %}
+    {% set n_in_bounds = True %}
+    {% set N = input_n // 2 %}
+{% else %}
+    {% set n_in_bounds = False %}
+    {% set N = data|length %}
+{% endif %}
+
+
+<table border=1>
+    <thead>
+        <tr>
+            <th>title</th>
+            <th>author</th>
+            <th>price</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in range(N) %}
+            <tr>
+                <td>{{data[i]["title"]}}</td>
+                <td>{{data[i]["author"]}}</td>
+                <td>{{data[i]["price"]}}</td>
+            </tr>
+        {% endfor %}
+        {% if n_in_bounds %}
+            <tr><td colspan="3">...</td></tr>
+            {% for i in range(N, data|length) %}
+                <tr>
+                    <td>{{data[i]["title"]}}</td>
+                    <td>{{data[i]["author"]}}</td>
+                    <td>{{data[i]["price"]}}</td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    </tbody>
+</table>
+
+{% endmacro %}

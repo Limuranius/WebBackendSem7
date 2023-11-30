@@ -1,0 +1,64 @@
+{% macro render_table(table_name, df_table) %}
+<div class="pretty-table">
+    <p>
+        <b>{{table_name}}</b>
+    </p>
+    <table>
+        <thead>
+        <tr>
+            {% for name in df_table.dtypes.index %}
+            <th>{{name}}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for i in range(len(df_table)) %}
+        <tr>
+            {% for name in df_table.dtypes.index %}
+            <td>
+                {% if df_table.loc[i, name] is none %}
+                <input type="button" value="Сдать">
+                {% else %}
+                {{ df_table.loc[i, name] }}
+                {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% endmacro %}
+
+{% macro create_select(values, texts, selected_value, select_name) %}
+<select name="{{select_name}}">
+    {% for value, text in zip(values, texts) %}
+    <option {% if value== selected_value %} selected {% endif %} value={{ value }}>
+        {{ text }}
+    </option>
+    {% endfor %}
+</select>
+{% endmacro %}
+
+
+<html>
+<head>
+    <title> Карточка читателя </title>
+</head>
+<body>
+<p>
+<form>
+    Читатель:
+    {{ create_select(readers["reader_id"], readers["reader_name"], reader_id, "reader_id") }}
+
+    Месяц:
+    {{ create_select(months.keys(), months.values(), selected_month, "month") }}
+
+    <input type="submit" value="Найти">
+</form>
+</p>
+{{ render_table(reader_id, book_readers) }}
+</body>
+</html>

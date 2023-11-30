@@ -1,0 +1,9 @@
+{% macro create_select(name, data, select_key) %}
+
+<select name="{{ name }}">
+    {% for key in data.keys() %}
+        <option value="{{ data[key] }}"{% if select_key == key %} selected{% endif %}>{{ data[key] }}</option>
+    {% endfor %}
+</select>
+
+{% endmacro %}

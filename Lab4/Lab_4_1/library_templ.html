@@ -1,0 +1,47 @@
+{% macro render_table(table_name, df_table) %}
+<div class="pretty-table">
+    <p>
+        <b>{{table_name}}</b>
+    </p>
+    <table>
+        <!-- формируем заголовок таблицы (имена столбцов) -->
+        <thead>
+
+        <tr>
+            {% for name in df_table.dtypes.index %}
+            <th>{{name}}</th>
+            {% endfor %}
+        </tr>
+
+        </thead>
+
+        <tbody>
+        <!-- для всех строк таблицы -->
+        {% for i in range(len(df_table)) %}
+        <tr>
+            <!-- выводим значение каждого столбца -->
+            {% for name in df_table.dtypes.index %}
+            <td> {{ df_table.loc[i, name] }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+</div>
+{% endmacro %}
+
+
+<html>
+<head>
+    <title> Дамп базы данных </title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+{% for table_name, table in zip(table_names, tables) %}
+
+{{ render_table(table_name, table) }}
+
+{% endfor %}
+</body>
+</html>
